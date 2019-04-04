@@ -1,0 +1,68 @@
+144. 二叉树的前序遍历
+给定一个二叉树，返回它的 前序 遍历。
+
+ 示例:
+
+输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [1,2,3]
+解法1： 递归方式
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> res;
+    vector<int> preorderTraversal(TreeNode* root) {
+        preorder(root);
+        return res;  
+    }
+    void preorder(TreeNode* root){
+        if(root == nullptr) 
+            return;
+        res.push_back(root -> val);
+        preorderTraversal(root -> left);
+        preorderTraversal(root -> right);
+    }
+};
+解法2 ： 非递归
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode*> s;
+        TreeNode *p = root;
+        while (!s.empty() || p) {
+            if (p) {
+                s.push(p);
+                res.push_back(p->val);
+                p = p->left;
+            } else {
+                TreeNode *t = s.top(); s.pop();
+                p = t->right;
+            }
+        }
+        return res;
+    }
+};
