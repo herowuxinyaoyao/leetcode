@@ -1,0 +1,75 @@
+145. 二叉树的后序遍历
+给定一个二叉树，返回它的 后序 遍历。
+
+示例:
+
+输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [3,2,1]
+解法1 ： 递归
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int>res;
+    vector<int> postorderTraversal(TreeNode* root) {
+        Traversal(root);
+        return res;
+        
+    }
+    void Traversal(TreeNode* root){
+        if(root == nullptr)
+            return;
+        
+        Traversal(root->left);
+        Traversal(root->right);
+        res.push_back(root->val);
+    }
+    
+};
+解法2：非递归
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int>res;
+        TreeNode* p = root;
+        stack<TreeNode*>s;
+        while(!s.empty() || p){
+            if(p){
+                s.push(p);
+                res.insert(res.begin(),p->val);
+                p = p->right;
+                
+            }
+            else{
+                TreeNode* t = s.top();
+                s.pop();
+                p = t->left;
+                
+            }
+        }
+        return res;
+        
+    }
+};
