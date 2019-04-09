@@ -1,0 +1,40 @@
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。 输入一个非减排序的数组的一个旋转，输出旋转数组的最小元素。
+例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。 NOTE：给出的所有元素都大于0，若数组大小为0，请返回0。
+class Solution {
+public:
+    int minNumberInRotateArray(vector<int> rotateArray) {
+        int n = rotateArray.size();
+        for(int i = 0;i < n;i++)
+            heapinsert(rotateArray,i);
+        swap(rotateArray,0,n-1);
+        while(n > 0){
+            heapify(rotateArray,0,n);
+            swap(rotateArray,0,--n);
+        }
+        return rotateArray[0];
+    }
+    void heapinsert(vector<int>& rotateArray,int i){
+        while(rotateArray[i] > rotateArray[(i-1)/2]){
+            swap(rotateArray,i,(i-1)/2);
+            i = (i-1)/2;
+        }
+    }
+    void heapify(vector<int>& rotateArray,int i,int n){
+        int left = i * 2 + 1;
+        while(left < n){
+            int largest = left + 1 < n && rotateArray[left+1] > rotateArray[left] ? left+1 : left;
+            largest = rotateArray[largest] > rotateArray[i] ? largest : i;
+            if(largest == i)
+                break;
+            swap(rotateArray,i,largest);
+            i = largest;
+            left = i * 2 + 1;
+        }
+        
+    }
+    void swap(vector<int>& a,int i ,int j){
+            int tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+        }
+};
