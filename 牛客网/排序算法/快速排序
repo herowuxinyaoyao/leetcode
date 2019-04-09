@@ -1,0 +1,32 @@
+快速排序
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。 输入一个非减排序的数组的一个旋转，输出旋转数组的最小元素。
+例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。 NOTE：给出的所有元素都大于0，若数组大小为0，请返回0。
+class Solution {
+public:
+    int minNumberInRotateArray(vector<int> rotateArray) {
+        quick_sort(rotateArray,0,rotateArray.size()-1);
+        return rotateArray[0];
+        
+    }
+    void quick_sort(vector<int>& rotateArray,int l,int r){
+        if(l < r){
+            int i = l;
+            int j = r;
+            int x = rotateArray[l];
+            while(i < j){
+                while(i < j && rotateArray[j] > x)
+                    j--;
+                if(i < j )
+                    rotateArray[i++] = rotateArray[j];
+                 while(i < j && rotateArray[i] < x)
+                    i++;
+                if(i < j)
+                    rotateArray[j--] = rotateArray[i];
+            }
+            rotateArray[i] = x;
+            quick_sort(rotateArray,l,i-1);
+            quick_sort(rotateArray,i+1,l);
+            
+        }
+    }
+};
