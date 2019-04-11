@@ -1,0 +1,179 @@
+数组实现固定大小的队列
+
+#include<iostream>
+
+#include<exception>
+
+using namespace std;
+
+#define NUM 5
+
+//用数组结构实现大小固定的队列和栈
+
+class ArrayIndexOutOfBoundsException :public exception
+
+{
+
+private:
+
+	const char*ptr;
+
+public:
+
+	ArrayIndexOutOfBoundsException(const char*ptr)
+
+	{
+
+		this->ptr = ptr;
+
+	}
+
+	virtual char const *what()
+
+	{
+
+		cout << this->ptr << endl;
+
+		return ptr;
+
+	}
+
+};
+
+class MyQuene
+
+{
+
+private:
+
+	int *array;
+
+	int start;
+
+	int end;
+
+	int size;
+
+	int len;
+
+public:
+
+	MyQuene(int N);
+
+	~MyQuene();
+
+	void push(int);
+
+	int poll();
+
+	int peek();
+
+};
+
+
+
+MyQuene::MyQuene(int N)
+{
+
+	size = 0;
+
+	start = 0;
+
+	end = 0;
+
+	len = N;
+
+	array = new int[len];
+
+}
+
+MyQuene::~MyQuene()
+
+{
+
+	delete[] array;
+
+}
+
+
+
+void MyQuene::push(int element)
+
+{
+
+	if (size == len)
+
+		throw new ArrayIndexOutOfBoundsException("The qunen is full");
+
+	else {
+		size++;
+
+		array[end] = element;
+
+		end = end == len - 1 ? 0 : end + 1;
+	}
+
+}
+
+int MyQuene::poll()
+
+{
+
+	if (size == 0)
+
+		throw new ArrayIndexOutOfBoundsException("The qunen is empty");
+
+	else {
+		size--;
+
+		int tmp = start;
+
+		start = start == len - 1 ? 0 : start + 1;
+		return array[tmp];
+	}
+
+}
+
+int MyQuene::peek()
+
+{
+
+	if (size == 0)
+
+	{
+
+		cout << "The qunen is empty" << endl;
+
+		return 0;
+
+	}
+	else
+		return array[start];
+}
+
+int main()
+
+{
+
+	MyQuene myQ(NUM);
+
+	myQ.push(1);
+	myQ.push(2);
+	myQ.push(3);
+	myQ.push(4);
+	
+	for (int i = 0; i < 3; i++) {
+		cout << myQ.poll() << endl;
+		cout << myQ.peek() << endl;
+	}
+		
+	//myQ.poll();
+	myQ.push(5);
+	cout << myQ.peek() << endl;
+	system("pause");
+
+	return 0;
+
+}
+
+
