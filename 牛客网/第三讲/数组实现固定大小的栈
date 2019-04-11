@@ -1,0 +1,200 @@
+数组实现固定大小的栈
+
+#include<iostream>
+
+#include<exception>
+
+using namespace std;
+
+#define NUM 5
+
+//用数组结构实现大小固定的队列和栈
+
+class ArrayIndexOutOfBoundsException :public exception
+
+{
+
+private:
+
+	const char*ptr;
+
+public:
+
+	ArrayIndexOutOfBoundsException(const char*ptr)
+
+	{
+
+		this->ptr = ptr;
+
+	}
+
+	virtual char const *what()
+
+	{
+
+		cout << this->ptr << endl;
+
+		return ptr;
+
+	}
+
+};
+
+class MyStack
+
+{
+
+private:
+
+	int *array;
+
+	int idx;
+
+	int N;
+
+public:
+
+	MyStack(int N);
+
+	~MyStack();
+
+	void push(int element);
+
+	int pop();
+
+	int peek();
+
+	void printStack();
+
+
+
+};
+
+MyStack::MyStack(int N)
+
+{
+
+	this->N = N;
+
+	array = new int[N];
+
+	idx = 0;
+
+
+
+}
+
+MyStack::~MyStack()
+
+{
+
+	delete[] this->array;
+
+}
+
+void MyStack::push(int element)
+
+{
+
+	if (idx == N)
+
+		throw ArrayIndexOutOfBoundsException("栈已满");
+
+	else
+
+		array[idx++] = element;
+
+}
+
+int MyStack::pop()
+
+{
+
+	if (idx == 0)
+
+		throw ArrayIndexOutOfBoundsException("栈中无元素");
+
+	else
+
+		return array[--idx];
+
+}
+
+int MyStack::peek()
+
+{
+
+	if (idx == 0)
+
+	{
+
+		return -1;
+
+	}
+
+	else
+
+		return array[idx - 1];//注意这里是看栈顶元素，但并不把元素去除所以用idx-1而不用--idx；
+
+
+
+}
+
+void MyStack::printStack()
+
+{
+
+	for (int i = 0; i<N; i++)
+
+	{
+
+		cout << array[i] << " ";
+
+	}
+
+	cout << endl;
+
+}
+
+
+
+
+
+int main()
+
+{
+
+	MyStack stack1(NUM);
+
+	stack1.push(1);
+
+	stack1.push(2);
+
+	stack1.push(3);
+
+	stack1.push(4);
+
+	stack1.push(15);
+
+	stack1.printStack();
+
+	for (int i = 0; i<NUM; i++)
+
+	{
+
+		cout << "pop = " << stack1.pop() << endl;
+
+		cout << "peek = " << stack1.peek() << endl;
+
+		cout << endl;
+
+	}
+
+	stack1.printStack();
+	system("pause");
+
+	return 0;
+
+}
+
+
