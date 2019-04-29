@@ -1,0 +1,77 @@
+计算在网格中从原点到特定点的最短路径长度
+[[1,1,0,1],
+ [1,0,1,0],
+ [1,1,1,1],
+ [1,0,1,1]]
+1 表示可以经过某个位置，求解从 (0, 0) 位置到 (tr, tc) 位置的最短路径长度。
+
+
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+int minPathLength(vector<vector<int>> grids, int tr, int tc);
+
+int main()
+{
+	vector<vector<int>> grids = { { 1,1,0,1 },{ 1,0,1,0 },{ 1,1,1,1 },{ 1,0,1,1 } };
+	int pathLen = minPathLength(grids, 3, 0);
+	cout << pathLen << endl;
+	system("pause");
+	return 0;
+}
+
+int minPathLength(vector<vector<int>> grids, int tr, int tc)
+{
+	if (grids.size() <= 0 || grids[0].size() <= 0 || tr < 0 || tc < 0)
+		return -1;
+
+
+	//定义方向：右移、左移、上移、下移
+	int directions[4][2] = { { 1,0 },{ -1,0 },{ 0,1 },{ 0,-1 } };
+	int m = grids.size(), n = grids[0].size();//行列数
+
+											  //queue存储接下来要遍历的点
+	queue<pair<int, int>> queue_point;
+	//首先将0,0点入队列
+	queue_point.push(pair<int, int>(0, 0));
+
+	int pathLength = 0;
+
+	while (!queue_point.empty())
+	{
+		//走一步可以到达的点有多少个
+		int size = queue_point.size();
+		//每一次循环，pathLength会加一
+		pathLength++;
+		//执行size次循环
+		while (size-- > 0)
+		{
+			pair<int, int> cur = queue_point.front();//返回队首元素
+			queue_point.pop();//弹出队首元素
+			for (auto d : directions) //试探所有的方向
+			{
+				int nr = cur.first + d[0], nc = cur.second + d[1];//下一行、列
+				pair<int, int> next(nr, nc);
+				//判断下一步是否越界
+				if (next.first < 0 || next.second < 0
+					|| next.first >= m || next.second >= n)
+				{
+					continue;
+				}
+				//判断点的值是否为0，为0代表不可以走
+				if (grids[next.first][next.second] == 0)
+					continue;
+
+				grids[next.first][next.second] = 0;//标记
+				if (next.first == tr && next.second == tc)
+					return pathLength;
+				queue_point.push(next);
+			}
+		}
+
+
+	}
+	return -1;
+}
