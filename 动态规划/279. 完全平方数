@@ -10,6 +10,12 @@
 解释: 13 = 4 + 9.
 
 
+状态转移方程为：
+dp[i]=min(dp[i],dp[i−j∗j]+1)
+dp[i−j∗j]+1是前面dp[i−j∗j]这个数的完全平方数个数加j∗j这一个完全平方数，
+所以＋1      
+
+
 class Solution {
 public:
     int numSquares(int n) {
