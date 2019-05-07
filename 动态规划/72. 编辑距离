@@ -22,6 +22,16 @@ enention -> exention (将 'n' 替换为 'x')
 exention -> exection (将 'n' 替换为 'c')
 exection -> execution (插入 'u')
 
+
+//对于(i-1,j-1)时，d(i-1, j-1)表示完成从A[0,i-1]到B[0,j-1]的编辑次数，即现在A[0,i-1]=B[0,j-1]，对于(i,j)，
+我们直接把A[i]替换成B[j]即完成编辑。因此(i-1,j-1)对应于把A[i]用B[j]替换的一次操作
+对于(i-1, j)时，d(i-1, j)表示完成从A[0, i-1]到B[0, j]的编辑次数，即现在A[0,i-1]=B[0,j]，对于(i,j)，
+我们直接把A[i]删除即可完成编辑，因此(i-1,j)对应于把A[i]删除的一次操作
+对于(i, j-1)时，d(i, j-1)表示完成从A[0, i]到B[0, j-1]的编辑次数，即现在A[0,i]=B[0,j-1]，对于(i,j)，
+我们直接用B[j]插入到A[i]的位置即可完成编辑，因此(i,j-1)对应于把B[j]插到A[i]的一次操作
+
+
+
 class Solution {
 public:
     int minDistance(string word1, string word2) {
