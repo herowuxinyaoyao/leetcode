@@ -1,0 +1,33 @@
+反转链表 
+
+题目描述
+输入一个链表，反转链表后，输出新链表的表头。
+
+/*
+struct ListNode {
+	int val;
+	struct ListNode *next;
+	ListNode(int x) :
+			val(x), next(NULL) {
+	}
+};*/
+class Solution {
+public:
+    ListNode* ReverseList(ListNode* pHead) {
+        if(pHead == NULL)
+            return NULL;
+        ListNode* reverselist = NULL;//新链表的头指针
+        ListNode* pNode = pHead;//当前指针
+        ListNode* prev = NULL;//当前指针的前一个结点
+        while(pNode != NULL){//当前结点不为空时才执行
+            ListNode* pnext = pNode->next;//链断开之前一定要保存断开位置后边的结点
+            if(pnext == NULL)//当pNext为空时，说明当前结点为尾节点
+                reverselist = pNode;
+            pNode->next  = prev;//指针反转
+            prev = pNode;
+            pNode = pnext;
+        }
+        return reverselist;
+
+    }
+};
