@@ -1,0 +1,59 @@
+543. 二叉树的直径
+
+给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过根结点。
+示例 :
+给定二叉树
+          1
+         / \
+        2   3
+       / \     
+      4   5    
+返回 3, 它的长度是路径 [4,2,1,3] 或者 [5,2,1,3]。
+注意：两结点之间的路径长度是以它们之间边的数目表示。
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+ https://www.cnblogs.com/jimmycheng/p/7101286.html
+ 这道题目给了我们一个二叉树，让我们找到二叉树的直径 - 最远的距离存在于两个点之间。 
+ 我们另外需要一个function - getDepth。 这个function利用post order，从最左边下面开始返回每一个点的depth， 
+  如果这个点是null，那么返回0，依次像上一个level，每次加1。
+在知道了每一个点的depth之后，我们可以来找到树的最大直径。我们来分析一下，怎么找到最大直径，取题目中给的例子，我们只看2 4 5 这基本结构， 
+2 4 5 这个子树的最大直径是2，这个直径等于 2的left 4的depth（1） 和 2的right 5的depth（1），两边的depth之和就等于最大直径 。 
+我们再回到原来的树立，1，2，3，4，5这个原题中的例子，我们从下往上看， 4的depth = 1， 5的depth = 1， 
+对于每一个parent node 取两个children的depth之和，和之前的diameter比较，大的就取代。 所以2的diameter = 2； 
+接着看2的depth = 2， 3的depth = 1， 那么1的diameter = 2 + 1  = 3, 比之前的diameter大，所以最大直径等于3。
+ 
+对于每一个点，left 和 right depth 之和，就等于这个点的最大直径。换一句话说，就是这个点，左边能延伸出去最大值 + 右边能延伸出去的最大值，
+加一起，就等于这个点的左边最远的点到右边最远的点的距离。 就是最大直径。
+
+
+class Solution {
+public:
+    int res = 0;
+    int diameterOfBinaryTree(TreeNode* root) {
+        getDepth(root);
+        return res;
+    }
+    int getDepth(TreeNode* root){
+        if(!root)
+            return 0;
+        
+        int left = getDepth(root->left);
+        int right = getDepth(root->right);
+        
+        int temp = left + right;
+        
+        if(temp > res)
+            res = temp;
+        
+        return max(left, right) + 1;
+    }
+};
