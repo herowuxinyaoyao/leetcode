@@ -16,6 +16,9 @@ s = "abpcplea", d = ["a","b","c"]
 所有输入的字符串只包含小写字母。
 字典的大小不会超过 1000。
 所有输入的字符串长度不会超过 1000。
+
+第一种解法：
+
 class Solution {
 public:
     string findLongestWord(string s, vector<string>& d) {
@@ -33,4 +36,35 @@ public:
         return "";
         
     }
+};
+
+第二种解法：
+
+class Solution {
+public:
+    string findLongestWord(string s, vector<string>& d) {
+        string res = "";
+        for(string t : d){
+            int l1 = res.size(), l2 = t.size();
+            if(l1 > l2 || (l1 == l2 && res < t))
+                continue;
+            if(issubstr(s,t))
+                res = t;
+            
+        }
+        return res;
+    }
+    bool issubstr(string s,string t){
+        int i = 0,j = 0;
+        while(i < s.size() && j < t.size()){
+            if(s[i] == t[j]){
+                j++;
+                //i++;
+            }
+                
+            i++;
+        }
+        return j == t.size();
+    }
+    
 };
