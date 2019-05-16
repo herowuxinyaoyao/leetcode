@@ -52,24 +52,24 @@ public:
 class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
-        vector<int>res;
-        TreeNode* p = root;
-        stack<TreeNode*>s;
-        while(!s.empty() || p){
-            if(p){
-                s.push(p);
-                res.insert(res.begin(),p->val);
-                p = p->right;
-                
-            }
-            else{
-                TreeNode* t = s.top();
-                s.pop();
-                p = t->left;
-                
-            }
+        vector<int> res;
+        stack<TreeNode*>s{{root}};
+        stack<TreeNode*>ss;
+        if(root){
+            while (!s.empty()) {//后续遍历为左右根，先排好根又左，push到另外一个栈中，就可以完成逆序
+                TreeNode *t = s.top(); s.pop();
+                ss.push(t);//这里不打印，存储到一个栈中完成逆序
+                if (t->left) //这里和前序遍历的区别是先压左边，再压右边
+                    s.push(t->left);
+                if (t->right) 
+                    s.push(t->right);
+            } 
+        }
+       while(!ss.empty()){
+            TreeNode *t = ss.top(); 
+            ss.pop();
+            res.push_back(t->val);
         }
         return res;
-        
     }
 };
