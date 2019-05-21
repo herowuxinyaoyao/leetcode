@@ -51,3 +51,65 @@ public:
 
 第三种解法： 
 
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+void swap(vector<int>& a, int i, int j);
+void heap_insert(vector<int>& a, int index);
+void heapfy(vector<int>& a, int index, int n);
+int findKthLargest(vector<int>& nums,int k) {
+	int n = nums.size();
+	for (int i = 0; i < n; i++) {
+		heap_insert(nums, i);
+	}
+	swap(nums, 0, --n);//这里必须是--n
+	while (n > 0) {
+		heapfy(nums, 0, n);
+		swap(nums, 0, --n);
+	}
+	return nums[nums.size() - k];//注意这里n已经变成了0，所以要用nums.size()，找了一下午的bug，啊啊啊啊
+}
+
+void heap_insert(vector<int>& nums, int i) {
+	while (nums[i] > nums[(i - 1) / 2]) {
+		swap(nums, i, (i - 1) / 2);
+		i = (i - 1) / 2;
+	}
+}
+
+void heapfy(vector<int>& nums, int i, int n) {
+	int left = i * 2 + 1;
+	while (left < n) {
+		int longst = left + 1 < n && nums[left + 1] > nums[left] ? left + 1 : left;
+		longst = nums[longst] > nums[i] ? longst : i;
+		if (longst == i)
+			break;
+		swap(nums, i, longst);
+		i = longst;
+		left = i * 2 + 1;
+	}
+}
+void swap(vector<int>& nums, int i, int j) {
+	int tmp = nums[i];
+	nums[i] = nums[j];
+	nums[j] = tmp;
+}
+
+int main() {
+
+	vector<int>a{ 3,2,1,5,6,4 };
+	int n = a.size();
+	cout << "排序前的数组：" << endl;
+	for (int i = 0; i < n; i++)
+		cout << a[i] << " ";
+	cout << endl;
+	int tt = findKthLargest(a,2);
+	cout << "排序后的数组：" << endl;
+	//for (int i = 0; i < n; i++)
+		//cout << a[i] << " ";
+	cout << tt << endl;
+	system("pause");
+	return 0;
+}
+
