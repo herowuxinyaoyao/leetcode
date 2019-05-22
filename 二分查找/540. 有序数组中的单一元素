@@ -1,0 +1,29 @@
+540. 有序数组中的单一元素
+
+给定一个只包含整数的有序数组，每个元素都会出现两次，唯有一个数只会出现一次，找出这个数。
+示例 1:
+输入: [1,1,2,3,3,4,4,8,8]
+输出: 2
+示例 2:
+输入: [3,3,7,7,10,11,11]
+输出: 10
+
+
+使用到了亦或1这个小技巧，为什么要亦或1呢，原来我们可以将坐标两两归为一对，比如0和1，2和3，4和5等等。而亦或1可以直接找到你的小伙伴，
+比如对于2，亦或1就是3，对于3，亦或1就是2。如果你和你的小伙伴相等了，说明落单数在右边，如果不等，说明在左边，这方法，太叼了有木有，
+
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        int left = 0, right = nums.size() - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == nums[mid ^ 1]) 
+                left = mid + 1;
+            else 
+                right = mid;
+        }
+        return nums[left];
+    }
+};
+
