@@ -1,0 +1,80 @@
+给定一个链表和一个特定值 x，对链表进行分隔，使得所有小于 x 的节点都在大于或等于 x 的节点之前。
+
+你应当保留两个分区中每个节点的初始相对位置。
+
+示例:
+
+输入: head = 1->4->3->2->5->2, x = 3
+输出: 1->2->2->4->3->5
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/partition-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+解法1：
+先找到第一个比x大的数的前一个，然后往后遍历，遇到大的下一个，遇到小的就尾插
+
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if(head == nullptr || head->next == nullptr)
+            return head;
+        ListNode* node = new ListNode(-1);
+        node->next = head;
+        ListNode* pre = node;
+        ListNode* cur = head;
+        while(pre->next && pre->next->val < x)
+            pre = pre->next;
+        cur = pre;
+        while(cur->next){
+            if(cur->next->val < x){
+                ListNode* tmp = cur->next;
+                cur->next = tmp->next;
+                tmp->next = pre->next;
+                pre->next = tmp;
+                pre = pre->next;
+            }else{
+                cur = cur->next;
+            }
+        }
+        return node->next;
+        
+    }
+};
+
+解法二：
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if(!head)
+            return head;
+        ListNode* node1 = new ListNode(-1);
+        ListNode* node2 = new ListNode(-1);
+        node1->next = head;
+        ListNode* cur = node1;
+        ListNode* p = node2;
+        while(cur->next){
+            if(cur->next->val < x){
+                p->next = cur->next;
+                p = p->next;
+                cur->next = cur->next->next;
+                p->next = nullptr;
+            }else{
+                cur = cur->next;
+            }
+        }
+        p->next = node1->next;
+        return node2->next;
+        
+    }
+};
