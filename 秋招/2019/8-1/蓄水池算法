@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <time.h>
+using namespace std;
+//蓄水池抽样算法
+vector<int> fun(vector<int>v, int m) {//从数组v中等概率的取出m个数
+	int n = v.size();
+	vector<int>res(m);//新建一个m个数的数组，并用v的前m个数初始化
+	if (v.empty() || m > n)
+		return res;
+	for (int i = 0; i < m; i++)
+		res[i] = v[i];
+	int i = 0, j = 0;
+	srand((unsigned)time(NULL));
+	for (i = m; i < n; i++) {//m到n-1选取一个数i，从0到i中随机生成一个数j，如果j < m ，就把v[i] 赋值给res[j]
+		j = rand() % (i + 1);
+		if (j < m) {
+			res[j] = v[i];
+		}
+	}
+	return res;
+}
+int main() {
+	vector<int>v = { 1,2,3,4,5,6,7,8,9,10 };
+	vector<int>res = fun(v, 5);
+	for (int i = 0; i < res.size(); i++)
+		cout << res[i] << endl;
+	system("pause");
+	return 0;
+}
