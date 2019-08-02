@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+struct node {
+	int val;
+	node* next;
+};
+node* reverselist(node* head, int from, int to) {
+	if (head == nullptr || to < from || from < 1)
+		return head;
+	node* pre = NULL;//from之前的节点
+	node* pos = NULL;//to之后的节点
+	node* cur = head;
+	int len = 0;
+	while (cur) {
+		len++;
+		pre = len == from - 1 ? cur : pre;
+		pos = len == to + 1 ? cur : pos;
+		cur = cur->next;
+	}
+	if (to > len)
+		return head;
+	node* node1 = pre == NULL ? head : pre->next;
+	node* node2 = NULL;
+	node2 = node1->next;
+	node1->next = pos;
+	node* next = NULL;
+	while (node2 != pos){
+		next = node2->next;
+		node2->next = node1;
+		node1 = node2;
+		node2 = next;
+	}
+	if (pre != NULL) {
+		pre->next = node1;
+		return head;
+	}
+	return node1;
+}
+void printlist(node* head) {
+	while (head) {
+		cout << head->val << " ";
+		head = head->next;
+	}
+	cout << endl;
+}
+int main() {
+	node* head = NULL;
+	node* p = NULL;
+	for (int i = 1; i < 10; i++) {
+		if (head == nullptr) {
+			head = new node();
+			head->val = i;
+			head->next = NULL;
+			p = head;
+			continue;
+		}
+		p->next = new node();
+		p = p->next;
+		p->val = i;
+		p->next = NULL;
+	}
+	printlist(head);
+	head = reverselist(head, 1, 4);
+	printlist(head);
+	system("pause");
+	return 0;
+}
