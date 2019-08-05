@@ -1,0 +1,63 @@
+//给你n个点，m条无向边，每条边都有长度d和花费p，给你起点s，终点t，
+//要求输出起点到终点的最短距离及其花费，如果最短距离是有多条路线，则输出花费最少的。
+//输入：输入n，m，点的编号是1~n，然后是m行，每行4个数a，b，d，p，表示a和b之间有一条边，
+//且长度为d，花费为p。最后一行是两个数s，t，起点s，终点t。n和m为0时输入结束。（1<n <= 1000, 0<m<100000, s != t）
+//输出：输出一行，有两个数，最短距离及其花费。
+
+#include <iostream>
+using namespace std;
+#define nmax 110
+#define inf 999999999
+struct Edge {
+	int len;
+	int cost;
+}edge[nmax][nmax];
+int u, n, m, book[nmax], s, t, dst[nmax], spend[nmax];
+int minx;
+int main() {
+	while (cin >> n >> m&&n != 0 && m != 0) {
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= n; j++) {
+				edge[i][j].len = inf;
+				edge[i][j].cost = 0;
+			}
+			edge[i][i].len = 0;
+		}
+		int a, b;
+		while (m--) {
+			cin >> a >> b;
+			cin >> edge[a][b].len >> edge[a][b].cost;
+			edge[b][a].len = edge[a][b].len;
+			edge[b][a].cost = edge[a][b].cost;
+		}
+		//cin >> s >> t;
+		cin >> s;
+		for (int i = 1; i <= n; i++) { dst[i] = edge[s][i].len; spend[i] = edge[s][i].cost; }
+		for (int i = 1; i <= n; i++) book[i] = 0;
+		book[s] = 1;
+		for (int i = 1; i <= n - 1; i++) {
+			minx = inf;
+			for (int j = 1; j <= n; j++) {
+				if (book[j] == 0 && dst[j]<minx) {
+					minx = dst[j];
+					u = j;
+				}
+			}
+			book[u] = 1;
+			for (int k = 1; k <= n; k++) {
+				if (book[k] == 0 && (dst[k]>dst[u] + edge[u][k].len || (dst[k] == dst[u] + edge[u][k].len&&spend[k]>spend[u] + edge[u][k].cost)) && edge[u][k].len<inf) {
+					dst[k] = dst[u] + edge[u][k].len;
+					spend[k] = spend[u] + edge[u][k].cost;
+				}
+			}
+		}
+		//cout << dst[t] << ' ' << spend[t] << endl;
+		for (int i = 1; i <= n; i++) {
+			if (i != s) {
+				cout << "第" << i << "号距离s点的最短距离" << dst[i] << ' ' << "花费为：" << spend[i] << endl;
+			}
+		}
+	}
+	system("pause");
+	return 0;
+}
