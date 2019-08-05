@@ -1,0 +1,37 @@
+//例1：寻找最短的从商场到赛场的路线。其中商店在1号节点处，赛场在n号节点处，1~n节点中有m条线路双向连接。
+/***先输入n，m，在输入m个三元组，n为路口数，m表示有几条路，
+其中1为商店，n为赛场，三元组分别表示起点终点，和该路径长，输出1到n的最短距离***/
+#include<iostream>
+using namespace std;
+#define inf 999999999
+#define nmax 110
+int n, m, edge[nmax][nmax];
+int main()
+{
+	int a, b;
+	while (cin >> n >> m&&n != 0) {
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= n; j++) {
+				edge[i][j] = inf;
+			}
+			edge[i][i] = 0;
+		}
+		while (m--) {
+			cin >> a >> b;
+			cin >> edge[a][b];
+			edge[b][a] = edge[a][b];
+		}
+		for (int k = 1; k <= n; k++) {
+			for (int i = 1; i <= n; i++) {
+				for (int j = 1; j <= n; j++) {
+					if (edge[k][j]<inf&&edge[i][k]<inf&&edge[i][j]>edge[i][k] + edge[k][j]) {
+						edge[i][j] = edge[i][k] + edge[k][j];
+					}
+				}
+			}
+		}
+		cout << edge[1][n] << endl;
+	}
+	system("pause");
+	return 0;
+}
